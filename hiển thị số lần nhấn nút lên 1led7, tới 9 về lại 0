@@ -1,0 +1,33 @@
+#include <ezButton.h>
+#include <TM1637Display.h>
+
+#define CLK 9
+#define DIO 10
+
+ezButton button(7); 
+
+TM1637Display display = TM1637Display(CLK, DIO);
+
+void setup() {
+  Serial.begin(9600);
+  display.clear();
+  display.setBrightness(7); 
+
+  button.setCountMode(COUNT_FALLING);
+  
+}
+
+void loop()
+{
+  button.loop(); // MUST call the loop() function first 
+ 
+  unsigned long count = button.getCount();
+  Serial.println(count);
+    if(count >= 9)
+      {
+        button.resetCount();
+      }
+  display.showNumberDec(count);            // displayed -109
+  delay(300);
+  display.clear();
+}
